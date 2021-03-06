@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+typedef struct
+{
+    int dd;
+    int mm;
+    int yy;
+    int amount;
+    char currency[3];
+
+}transaction;
+
+int main()
+{
+    int total=0;
+    int counter=1;
+    int n;
+    scanf("%d",&n);
+    transaction bank[n];
+    for(int i=0;i<n;i++)
+    {
+        scanf("%s %d %d/%d/%d",bank[i].currency,&bank[i].amount, &bank[i].dd , &bank[i].mm, &bank[i].yy);
+   
+        if((bank[i].amount<5000 && bank[i].mm<04) && (bank[i].currency[0]=='U' && bank[i].currency[1]=='S' && bank[i].currency[2]=='D'))
+        {
+            printf("%d. %02d/%02d/%04d %d %s\n",counter++,bank[i].dd, bank[i].mm, bank[i].yy, bank[i].amount , bank[i].currency);
+            total+=bank[i].amount;
+        }
+    }
+    printf("Total: %d USD",total);
+    return 0;
+}
