@@ -1,0 +1,77 @@
+#include<stdio.h>
+#include<string.h>
+#include <stdbool.h>
+
+typedef struct SkiLift
+{
+    char name[15];
+    int capacity;
+    int inFunction;
+}SkiLift;
+
+typedef struct SkiCenter
+{
+    char name[20];
+    char country[20];
+    SkiLift skilifts[20];
+    int number_of_skilifts;
+}SkiCenter;
+
+int calculate_capacity (SkiCenter sc)
+{
+    int sum=0;
+    for(int i=0;i<sc.number_of_skilifts;i++)
+    {
+        if(sc.skilifts[i].inFunction==1)
+        {
+        sum+=sc.skilifts[i].capacity;
+        }
+    }
+    return sum;
+}
+
+void biggestCapacity(SkiCenter *sc, int n)
+{
+    SkiCenter max_skiCenter=sc[0];
+    int i;
+    for(i=0;i<n;i++)
+    {
+        if(calculate_capacity(sc[i])>calculate_capacity(max_skiCenter))
+            max_skiCenter=sc[i];
+        else if(calculate_capacity(sc[i])==calculate_capacity(max_skiCenter))
+        {
+           if (sc[i].number_of_skilifts > max_skiCenter.number_of_skilifts) {
+                max_skiCenter = sc[i];
+        }
+       }
+     }
+     printer(max_skiCenter);
+}
+
+void printer (SkiCenter sc) {
+    printf("%s\n%s\n%d\n", sc.name, sc.country, calculate_capacity(sc));
+}
+
+int main()
+{
+    int i,n;
+	scanf("%d", &n);
+	SkiCenter skiCenters[n];
+	for (i = 0; i < n; i++){
+        //scan the name, country and number of lifts
+        scanf("%s %s %d", skiCenters[i].name , skiCenters[i].country , &skiCenters[i].number_of_skilifts);
+        //per each ski lift scan:
+        	//the name
+        	//the max number of users
+        	//wether is in function
+       int j;
+       for(j=0;j<skiCenters[i].number_of_skilifts;j++)
+       {
+           scanf("%s %d %d", skiCenters[i].skilifts[j].name, &skiCenters[i].skilifts[j].capacity , &skiCenters[i].skilifts[j].inFunction);
+       }
+
+	}
+    //call the method biggestCapacity
+    biggestCapacity(skiCenters,n);
+	return 0;
+}
