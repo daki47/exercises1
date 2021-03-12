@@ -1,0 +1,78 @@
+#include<iostream>
+using namespace std;
+
+struct player
+{
+    char name[15];
+    int level;
+    int points;
+};
+
+struct ComputerGame
+{
+    char game_name[20];
+    player players[30];
+    int number_of_players;
+};
+
+void bestPlayer(ComputerGame *cg, int n)
+{
+    ComputerGame current;
+    int jj;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<cg[i].number_of_players-1;j++)
+        {
+            if(cg[i].players[j].points > cg[i].players[j+1].points)
+            {
+                current=cg[i];
+                jj=j;
+            }
+            else if(cg[i].players[j].points == cg[i].players[j+1].points)
+            {
+                if(cg[i].players[j].level > cg[i].players[j+1].level)
+                {
+                    current=cg[i];
+                    jj=j;
+                }
+                else
+                {
+                    current=cg[i];
+                    jj=j+1;
+                }
+            }
+            else
+            {
+                current=cg[i];
+                jj=j+1;
+            }
+
+        }
+
+    }
+cout<<"Najdobar igrac e igracot so korisnicko ime "<<current.players[jj].name<<" koj ja igra igrata "<<current.game_name<<endl;
+
+}
+//cout<<"Najdobar igrac e igracot so korisnicko ime "cg.players.name<<" koj ja igra igrata "cg.game_name<<endl;
+
+int main() {
+    int n;
+//    char name[20];
+    cin>>n;
+    //create an array of max 100 computer games;
+    ComputerGame game[100];
+    for (int i=0; i<n; i++) {
+        ComputerGame nova;
+        cin>>nova.game_name>>nova.number_of_players;
+        //player pole[30];
+        for (int j=0; j<nova.number_of_players; j++) {
+            player news;
+            cin>>news.name>>news.level>>news.points;
+            nova.players[j]=news;
+        }
+        game[i]=nova;
+    }
+
+    bestPlayer(game,n);
+    return 0;
+}
