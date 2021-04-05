@@ -1,0 +1,180 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+
+// Your code here
+class Bill
+{
+    char *number;
+    int price;
+    char month[8];
+    bool status;
+
+    void copy(const Bill &b)
+    {
+         this->number=new char[strlen(b.number)+1];
+        strcpy(this->number,b.number);
+        this->price=b.price;
+        strcpy(this->month,b.month);
+        this->status=b.status;
+    }
+public:
+    Bill(char *number=" ",int price=1, char month[8]="mm",bool status=false)
+    {
+        this->number=new char[strlen(number)+1];
+        strcpy(this->number,number);
+        this->price=price;
+        strcpy(this->month,month);
+        this->status=status;
+    }
+    Bill(const Bill & b){copy(b);}
+    bool operator==(const Bill &b){return strcmp(this->number,b.number)==0;}
+    friend ostream &operator<<(ostream &out, const Bill &b)
+    {
+        return out<<b.number<<" ("<<b.month<<") - "<<b.price;
+    }
+
+    char *getnumber()
+    {
+        return this->number;
+    }
+       bool get_status(){
+           return this->status;
+       }
+
+       char *get_month(){
+           return this->month;
+       }
+
+       int get_expense(){
+           return this->price;
+       }
+
+};
+
+class UserProfile
+{
+    char username[30];
+    Bill Billsarray[30];
+    int n;
+public:
+    UserProfile(char username[30]="us")
+    {
+        strcpy(this->username,username);
+    }
+    UserProfile(const UserProfile & u)
+    {
+        strcpy(this->username,u.username);
+    }
+
+    friend ostream &operator<<(ostream & out, const UserProfile &u)
+    {
+        out<<"Unpaid bills of user "<<u.username<<" are:"<<endl;
+        for(int i=0;i<u.n;i++)
+        {
+            if(u.Billsarray[i].get_status()==false)
+            {
+            out<<u.Billsarray[i].getnumber<<" ("u.Billsarray[i].get_month()<<") - "<<u.Billsarray[i].get_price()<<endl;
+            }
+        }
+        return out;
+    }
+    UserProfile &operator+=(Bill & b)
+    {
+        bool bille = false;
+        for(int i = 0; i<this->n; i++)
+        {
+            if(strcmp(b.getnumber(), this->Billsarray[i].getnumber()) == 0)
+            {
+                cout<<"The bill already exists"<<endl;
+                bille= true;
+                break;
+            }
+        }
+        if(!bille){
+            this->Billsarray[this->n] = b;
+            this->n = this->n+1;
+        }
+    }
+
+  int totalDue(int m, int y){
+        int total = 0;
+        for(int i = 0; i<this->n; i++){
+            string mAndy = this->Billsarray[i].get_date();
+            int month = stoi(mAndy.substr(0,2));
+            int year = stoi(mAndy.substr(3,4));
+
+            if(month == m && year == y){
+                total += this->Billsarray[i].get_expense();
+                 }
+        }
+        return total;
+
+    }
+};
+
+int main() {
+    char number[50], month[8], name[50];
+    int price, n;
+    bool status;
+
+
+    int type;
+    cin >> type;
+
+    if (type == 1) {
+        cout << "-----Test Bill & operator <<-----" << endl ;
+        cin >> number >> price >> month >> status;
+        Bill b(number, price, month, status);
+        cout << b;
+    } else if (type == 2) {
+        cout << "-----Test Bill & operator == -----" << endl ;
+        cin >> number >> price >> month >> status;
+        Bill b1(number, price, month, status);
+        cin >> number >> price >> month >> status;
+        Bill b2(number, price, month, status);
+        if (b1 == b2) cout << "Equal" << endl;
+        else cout << "Not equal" << endl;
+
+    } else if (type == 3) {
+        cout << "-----Test UserProfile & operator += & << -----" << endl ;
+        cin >> name >> n;
+        UserProfile up(name);
+        for (int i = 0; i < n; i++) {
+            cin >> number >> price >> month >> status;
+            Bill s(number, price, month, status);
+            up += s;
+        }
+        cout << up;
+    } else if (type == 4) {
+        cout << "-----Test UserProfile & operator += & totalDue -----" << endl ;
+        cin >> name >> n;
+        UserProfile up(name);
+        for (int i = 0; i < n; i++) {
+            cin >> number >> price >> month >> status;
+            Bill s(number, price, month, status);
+            up += s;
+        }
+        int m, y;
+        cin >> m >> y;
+        cout << "Total due for month " << m << " and year " << y << " is:";
+        cout << up.totalDue(m, y) << endl;
+    } else if (type == 5) {
+        cout << "-----Test all -----" << endl ;
+        cin >> name >> n;
+        UserProfile up(name);
+        for (int i = 0; i < n; i++) {
+            cin >> number >> price >> month >> status;
+            Bill s(number, price, month, status);
+            up += s;
+        }
+        cout << up;
+        int m, y;
+        cin >> m >> y;
+        cout << "Total due for month " << m << " and year " << y << " is:";
+        cout << up.totalDue(m, y) << endl;
+    }
+
+    return 0;
+}
+/* gabim osht e perzime ala*/
